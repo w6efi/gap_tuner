@@ -27,9 +27,9 @@ void UI::setupMainTab()
     ESPUI.addControl(Button, "", "1", Alizarin, tuning_network_group, createCallback(SET_TUNING_NET_1));
     ESPUI.addControl(Button, "", "2", Alizarin, tuning_network_group, createCallback(SET_TUNING_NET_2));
 
-    auto calibrate_group = ESPUI.addControl(Button, "Calibration", "Open", Dark, maintab, createCallback(SET_ANTENNA_LENGTH_LONG));
-    ESPUI.addControl(Button, "", "Short", Alizarin, calibrate_group, createCallback(SET_ANTENNA_LENGTH_LONG));
-    ESPUI.addControl(Button, "", "Load", Alizarin, calibrate_group, createCallback(SET_ANTENNA_LENGTH_LONG));
+    auto calibrate_group = ESPUI.addControl(Button, "Calibration", "Open", Dark, maintab, createCallback(SET_CAL_OPEN));
+    ESPUI.addControl(Button, "", "Short", Alizarin, calibrate_group, createCallback(SET_CAL_SHORT));
+    ESPUI.addControl(Button, "", "Load", Alizarin, calibrate_group, createCallback(SET_CAL_LOAD));
 }
 
 void UI::setupRelayTestTab()
@@ -97,6 +97,7 @@ void UI::textCallback(Control *sender, int type)
 }
 
 // helper function to create a lambda function callback for button action
+// adds action variable to callback
 std::function<void(Control *, int)>
 UI::createCallback(buttonAction_t action)
 {
@@ -108,20 +109,29 @@ UI::createCallback(buttonAction_t action)
 
 void UI::actionCallback(Control *sender, int type, buttonAction_t action)
 {
-    // static char button_down_style[30];
+    static int last_button_id = -1;
+    if (type == B_UP)
+        return;
+    printf("button_id: = %d, type = %d, action = %d\n", sender->id, type, action);
+    
+    if (last_button_id >= 0) 
+        setButtonStyle(B_UP, last_button_id);
+    last_button_id = sender->id;
+    setButtonStyle(B_DOWN, sender->id);
+
+    relayGroup->performAction(sender, type, action);
+}
+
+void UI::setButtonStyle(int type, int button_id) {
     static char button_down_style[30];
     static char button_up_style[30];
 
-    // Generate two random HTML hex colour codes, and print them into CSS style rules
-    // sprintf(stylecol1, "border-bottom: #999 3px solid; background-color: #%06X;", (unsigned int)random(0x0, 0xFFFFFF));
-    sprintf(button_down_style, "background-color: #ff9000;");
+    sprintf(button_down_style, "background-color: #f5af0c;");
     sprintf(button_up_style, "background-color: #9c9c9c;");
 
-    // String button_down_style = "background-color: #ff9000X;";
-    printf("button_id: = %d, type = %d, action = %d\n", sender->id, type, action);
     if (type == B_DOWN)
-        ESPUI.setElementStyle(sender->id, button_down_style);
+        ESPUI.setElementStyle(button_id, button_down_style);
     else // type == B_UP
-        ESPUI.setElementStyle(sender->id, button_up_style);
-    relayGroup->performAction(sender, type, action);
+        ESPUI.setElementStyle(button_id, button_up_style);
+
 }

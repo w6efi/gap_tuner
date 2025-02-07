@@ -15,6 +15,14 @@ typedef enum pins
 	RELAY_LK99_RESET = GPIO_NUM_9
 } pin_t;
 
+
+typedef struct
+{
+	pin_t pin;
+	uint8_t value;
+} pinValue_t;
+
+
 typedef enum buttonActions
 {
 	SET_TUNING_NET_NONE,
@@ -25,23 +33,24 @@ typedef enum buttonActions
 	SET_CAL_LOAD,
 	SET_ANTENNA_LENGTH_SHORT,
 	SET_ANTENNA_LENGTH_LONG,
-    TEST_K1,
-    TEST_K2,
-    TEST_K3,
-    TEST_K4,
-    TEST_K5,
-    TEST_K6,
-    TEST_K7,
-    TEST_LK_99
+	TEST_K1,
+	TEST_K2,
+	TEST_K3,
+	TEST_K4,
+	TEST_K5,
+	TEST_K6,
+	TEST_K7,
+	TEST_LK_99
 } buttonAction_t;
 
-class RelayGroup {
-    public:
-        RelayGroup();
-        void performAction(Control *sender, int type, buttonAction_t action);
-    private:
-        
+class RelayGroup
+{
+public:
+	RelayGroup();
+	void performAction(Control *sender, int type, buttonAction_t action);
 
+private:
+	void setRelayStates(pinValue_t pinValues[], int size);
 };
 
 #endif

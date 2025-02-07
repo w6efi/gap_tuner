@@ -2,25 +2,31 @@
 #include <ESPUI.h>
 #include <stdint.h>
 
+
 // relay array settings corresponding to actions to perform when buttons on the UI are pushed
 // namespace makes this file scope only (static)
 namespace
 {
-    typedef struct
-    {
-        pin_t pin;
-        uint8_t value;
-    } pinValue_t;
 
-    pinValue_t allOff[] =                   {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setTuningNetNone[] =         {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setTuningNet1[]  =           {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setTuningNet2[] =            {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setCalShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setCalOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setCalLoad[] =               {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH} {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setAntennaLengthShort[] =    {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t setAntennaLengthLong[] =     {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t allOff[] =                {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t tuningNetNone[] =         {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t tuningNet1[]  =           {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t tuningNet2[] =            {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t calShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t calOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t calLoad[] =               {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t antennaLengthShort[] =    {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t antennaLengthLong[] =     {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+}
+
+#define SET_RELAY_STATES(array) setRelayStates(array, (sizeof(array) / sizeof(array[0])))
+
+void RelayGroup::setRelayStates(pinValue_t pinValues[], int size)
+{
+    printf("array len = %d\n", size);
+    for (int i =0; i < size; i++) {
+        digitalWrite(pinValues[i].pin, pinValues[i].value);
+    } 
 }
 
 RelayGroup::RelayGroup()
@@ -42,15 +48,30 @@ void RelayGroup::performAction(Control *sender, int type, buttonAction_t action)
 {
     switch (action)
     {
-    // case SET_TUNING_NET_NONE:
-
-    // SET_TUNING_NET_1,
-    // SET_TUNING_NET_2,
-    // SET_CAL_SHORT,
-    // SET_CAL_OPEN,
-    // SET_CAL_LOAD,
-    // SET_ANTENNA_LENGTH_SHORT,
-    // SET_ANTENNA_LENGTH_LONG,
+    case SET_TUNING_NET_NONE:
+        SET_RELAY_STATES(tuningNetNone);
+        break;
+    case SET_TUNING_NET_1:
+        SET_RELAY_STATES(tuningNet1);
+        break;
+    case SET_TUNING_NET_2:
+        SET_RELAY_STATES(tuningNet2);
+        break;
+    case SET_CAL_SHORT:
+        SET_RELAY_STATES(calShort);
+        break;
+    case SET_CAL_OPEN:
+        SET_RELAY_STATES(calOpen);
+        break;
+    case SET_CAL_LOAD:
+        SET_RELAY_STATES(calLoad);
+        break;
+    case SET_ANTENNA_LENGTH_SHORT:
+        SET_RELAY_STATES(antennaLengthShort);
+        break;
+    case SET_ANTENNA_LENGTH_LONG:
+        SET_RELAY_STATES(antennaLengthLong);
+        break;
     case TEST_K1:
         digitalWrite(RELAY_K1, type == B_DOWN ? 1 : 0);
         break;

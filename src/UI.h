@@ -19,6 +19,7 @@ private:
     void textCallback(Control *sender, int type);
 
     void actionCallback(Control *sender, int type, buttonAction_t action);
+    void setButtonStyle(int type, int button_id);
     std::function<void(Control *, int)> createCallback(buttonAction_t action);
 };
 #endif
