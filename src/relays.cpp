@@ -7,13 +7,12 @@
 // namespace makes this file scope only (static)
 namespace
 {
-
     pinValue_t allOff[] =                {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
     pinValue_t tuningNetNone[] =         {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
     pinValue_t tuningNet1[]  =           {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}};
     pinValue_t tuningNet2[] =            {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}};
-    pinValue_t calShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
-    pinValue_t calOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    pinValue_t calShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, HIGH}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    pinValue_t calOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, LOW},{RELAY_K3, LOW}, {RELAY_K4, LOW}};
     pinValue_t calLoad[] =               {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}};
     pinValue_t antennaLengthShort[] =    {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, LOW}};
     pinValue_t antennaLengthLong[] =     {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, HIGH}};
@@ -42,6 +41,11 @@ RelayGroup::RelayGroup()
     pinMode(RELAY_LK99_SET, OUTPUT);
     pinMode(RELAY_LK99_RESET, OUTPUT);
     SET_RELAY_STATES(allOff);
+
+    // todo: undo hack
+    digitalWrite(RELAY_LK99_RESET, HIGH);
+    digitalWrite(RELAY_LK99_SET, HIGH);
+
 }
 
 void RelayGroup::performAction(Control *sender, int type, buttonAction_t action)
@@ -52,10 +56,12 @@ void RelayGroup::performAction(Control *sender, int type, buttonAction_t action)
         SET_RELAY_STATES(tuningNetNone);
         break;
     case SET_TUNING_NET_1:
-        SET_RELAY_STATES(tuningNet1);
+        SET_RELAY_STATES(tuningNet1); // closes K4 to connect-in tuning network.  LK99 choses individual network
+        setRelayLatch(RELAY_LK99_RESET);
         break;
     case SET_TUNING_NET_2:
         SET_RELAY_STATES(tuningNet2);
+        setRelayLatch(RELAY_LK99_SET);
         break;
     case SET_CAL_SHORT:
         SET_RELAY_STATES(calShort);
@@ -94,4 +100,11 @@ void RelayGroup::performAction(Control *sender, int type, buttonAction_t action)
         digitalWrite(RELAY_K7, type == B_DOWN ? 1 : 0);
         break;
     }
+}
+
+void RelayGroup::setRelayLatch(pin_t relay)
+{
+    digitalWrite(relay, HIGH);
+    delay(1000);
+    digitalWrite(relay, LOW);
 }
