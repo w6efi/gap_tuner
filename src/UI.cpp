@@ -123,11 +123,9 @@ void UI::actionCallback(Control *sender, int type, buttonAction_t action)
 }
 
 void UI::setButtonStyle(int type, int button_id) {
-    static char button_down_style[30];
-    static char button_up_style[30];
-
-    sprintf(button_down_style, "background-color: #f5af0c;");
-    sprintf(button_up_style, "background-color: #9c9c9c;");
+    // must be static for ESPUI websockets
+    static char button_down_style[] = "background-color: #f5af0c;";
+    static char button_up_style[] = "background-color: #9c9c9c;";
 
     if (type == B_DOWN)
         ESPUI.setElementStyle(button_id, button_down_style);

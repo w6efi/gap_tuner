@@ -9,21 +9,20 @@ namespace
 {
 
     pinValue_t allOff[] =                {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t tuningNetNone[] =         {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t tuningNet1[]  =           {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t tuningNet2[] =            {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH},{RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t calShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t calOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t calLoad[] =               {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t antennaLengthShort[] =    {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
-    pinValue_t antennaLengthLong[] =     {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    pinValue_t tuningNetNone[] =         {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    pinValue_t tuningNet1[]  =           {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}};
+    pinValue_t tuningNet2[] =            {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}};
+    pinValue_t calShort[] =              {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    pinValue_t calOpen[] =               {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    pinValue_t calLoad[] =               {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}};
+    pinValue_t antennaLengthShort[] =    {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, LOW}};
+    pinValue_t antennaLengthLong[] =     {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, HIGH}};
 }
 
 #define SET_RELAY_STATES(array) setRelayStates(array, (sizeof(array) / sizeof(array[0])))
 
 void RelayGroup::setRelayStates(pinValue_t pinValues[], int size)
 {
-    printf("array len = %d\n", size);
     for (int i =0; i < size; i++) {
         digitalWrite(pinValues[i].pin, pinValues[i].value);
     } 
@@ -42,6 +41,7 @@ RelayGroup::RelayGroup()
     pinMode(RELAY_K7, OUTPUT);
     pinMode(RELAY_LK99_SET, OUTPUT);
     pinMode(RELAY_LK99_RESET, OUTPUT);
+    SET_RELAY_STATES(allOff);
 }
 
 void RelayGroup::performAction(Control *sender, int type, buttonAction_t action)
