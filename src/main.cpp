@@ -34,19 +34,20 @@ void extendedCallback(Control *sender, int type, void *param);
 uint16_t styleButton, styleLabel, styleSwitcher, styleSlider, styleButton2, styleLabel2, styleSlider2;
 volatile bool updates = false;
 
-
 void setup()
 {
 
 	randomSeed(0);
 	Serial.begin(115200);
-	// while(!Serial);
+	delay(5000);
+	while (!Serial)
+		;
 	if (SLOW_BOOT)
 		delay(5000); // Delay booting to give time to connect a serial monitor
 
 	connectWifi();
 	WiFi.setSleep(false);
-	
+
 	// Start up the UI AFTER WiFi is connected
 	new UI(new RelayGroup());
 	ESPUI.begin(HOSTNAME);
@@ -76,7 +77,6 @@ void loop()
 	// 	}
 	// }
 }
-
 
 // Most elements in this test UI are assigned this generic callback which prints some
 // basic information. Event types are defined in ESPUI.h
@@ -123,21 +123,30 @@ void connectWifi()
 	WiFi.hostname(HOSTNAME);
 #endif
 	Serial.println("Begin wifi...");
+	printf("IS this thing on?\n");
 
 	// Load credentials from EEPROM
-	if (!(FORCE_USE_HOTSPOT))
+	// if (!(FORCE_USE_HOTSPOT))
+	if (1)
 	{
+		printf("In get creds\n");
 		yield();
+		printf("after yield\n");
+
 		EEPROM.begin(100);
 		String stored_ssid, stored_pass;
 		readStringFromEEPROM(stored_ssid, 0, 32);
 		readStringFromEEPROM(stored_pass, 32, 96);
 		EEPROM.end();
 
+		printf("ssid: %s, pass: %s\n", stored_ssid.c_str(), stored_pass.c_str());
+
 		// Try to connect with stored credentials, fire up an access point if they don't work.
 		WiFi.begin(stored_ssid.c_str(), stored_pass.c_str());
 
-		connect_timeout = 28; // 7 seconds
+		// connect_timeout = 28; // 7 seconds
+		connect_timeout = 100; 
+
 		while (WiFi.status() != WL_CONNECTED && connect_timeout > 0)
 		{
 			delay(250);
@@ -172,4 +181,3 @@ void connectWifi()
 		} while (connect_timeout);
 	}
 }
-
