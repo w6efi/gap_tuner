@@ -28,7 +28,7 @@ void WebServerManager::begin() {
 }
 
 void WebServerManager::handleRootRequest(AsyncWebServerRequest *request) {
-    request->send_P(200, "text/html", index_html);
+    request->send(200, "text/html", index_html);
 }
 
 void WebServerManager::handleButtonRequest(AsyncWebServerRequest *request) {

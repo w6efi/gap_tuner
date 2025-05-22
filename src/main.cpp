@@ -1,8 +1,5 @@
 
-// --- Network Credentials (Global) ---
-const char* ssid = "IOT";
-const char* password = "xxxxxxxx";
-const char* mDnsHostname = "gaptuner";
+const char* mDnsHostname = "gaptuner"; // Keep hostname for mDNS
 
 /*
  * ESP32 GAP Antenna Tuner Web Interface - v3 (K&R Indent)
@@ -28,7 +25,7 @@ const char* mDnsHostname = "gaptuner";
 // --- Global Object Instances ---
 RelayController  g_relayController;
 GAPTuner         g_gaptuner(g_relayController);
-NetworkMgr       g_networkMgr(ssid, password, mDnsHostname);
+NetworkMgr       g_networkMgr(mDnsHostname);
 AsyncWebServer   g_asyncServer(80);
 WebServerManager g_webServerManager(g_asyncServer, g_gaptuner, g_networkMgr);
 
@@ -46,12 +43,24 @@ void setup()
     g_relayController.initializePins();
     g_gaptuner.applyDefaultState();
 
+    // Initialize NVS flash
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        DEBUG_PRINTLN("main: NVS partition was truncated and needs to be erased.");
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+    DEBUG_PRINTLN("main: NVS flash initialized.");
+
     if (g_networkMgr.connect()) {
         g_networkMgr.setupMDNS();
         g_webServerManager.setupRoutes();
         g_webServerManager.begin();
     } else {
         DEBUG_PRINTLN("Setup: WiFi connection failed. Server not started.");
+        // In a real scenario, the startConfigAP() in NetworkMgr::connect()
+        // would handle the fallback to AP mode for configuration.
     }
 }
 
