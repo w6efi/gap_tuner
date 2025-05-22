@@ -6,7 +6,7 @@ The Gap Dipole is an antenna and remote tuner that allows both changing the leng
 
 We are currently using the esp32-s3-devkit-c-1-n16r8v board.  There is a esp32-s3-devkit-c-1-n16r8v.json file here.  Copy that to ~/.platformio/platforms/espressif32/boards/  if you are using platformio.
 
-Web UI image:
+Current Web UI image:
 
 ![image](https://github.com/user-attachments/assets/86f151cd-c9a9-4343-a31c-9c03c372dd1f)
 
