@@ -15,7 +15,6 @@ typedef enum pins
 	RELAY_LK99_RESET = GPIO_NUM_9  //latching
 } pin_t;
 
-
 typedef struct
 {
 	pin_t pin;
