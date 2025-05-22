@@ -1,7 +1,7 @@
 
 // --- Network Credentials (Global) ---
 const char* ssid = "IOT";
-const char* password = "okmijn99";
+const char* password = "xxxxxxxx";
 const char* mDnsHostname = "gaptuner";
 
 /*
