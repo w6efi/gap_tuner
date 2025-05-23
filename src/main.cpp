@@ -69,7 +69,7 @@ void loop()
     delay(10);
 }
 
-// --- HTML String (Moved to the Bottom) ---
+// Gap Tuner UI HTML and Javascript
 const char index_html[] PROGMEM = R"rawliteral(
 <!DOCTYPE html>
 <html lang="en">
@@ -78,31 +78,31 @@ const char index_html[] PROGMEM = R"rawliteral(
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>GAP Antenna Tuner</title>
     <style>
-        :root{--apple-blue:#007AFF;--apple-blue-hover:#005ecb;--apple-blue-active:#004bad;--light-grey:#f2f2f7;--container-bg:#ffffff;--text-color:#1c1c1e;--secondary-text-color:#6e6e73;--border-radius:10px;--group-spacing:30px;--button-v-spacing:12px;--button-h-spacing:10px;}
-        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;background-color:var(--light-grey);margin:0;padding:20px 15px;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-        .container{background:var(--container-bg);padding:25px 30px;border-radius:var(--border-radius);box-shadow:0 4px 12px rgba(0,0,0,0.08);text-align:center;width:100%;max-width:380px;box-sizing:border-box;}
+        :root{--icom-black:#1a1a1a;--icom-dark-grey:#2c2c2c;--icom-light-grey:#e0e0e0;--icom-blue-accent:#00aaff;--icom-shadow-dark:rgba(0,0,0,0.6);--icom-shadow-light:rgba(255,255,255,0.05);--border-radius:5px;--group-spacing:25px;--button-v-spacing:10px;--button-h-spacing:8px;--button-bg:var(--icom-button-grey);--button-text:var(--icom-light-grey);--icom-button-grey:#424242;}
+        body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;background-color:var(--icom-black);margin:0;padding:20px 15px;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        .container{background:var(--icom-dark-grey);padding:25px 30px;border-radius:var(--border-radius);box-shadow:0 0 15px var(--icom-shadow-dark), inset 0 0 5px var(--icom-shadow-light);text-align:center;width:100%;max-width:380px;box-sizing:border-box;}
         
-        h1{color:var(--text-color);margin-top:0;margin-bottom: 0px; font-weight:600;font-size:1.6em;}
+        h1{color:var(--icom-light-grey);margin-top:0;margin-bottom: 0px; font-weight:600;font-size:1.6em;}
 
         .wifi-status-line { text-align: center; margin-bottom: 30px; height: 1.2em; }
         #wifiStatusIndicator { display: inline-block; width: 15px; height: 15px; border-radius: 50%; margin-right: 6px; vertical-align: middle; background-color: #ffc107; transition: background-color 0.5s ease; }
         .wifi-online { background-color: #28a745 !important; }
         .wifi-offline { background-color: #dc3545 !important; }
-        #wifiStatusText { font-size: 1.0em; vertical-align: middle; color: var(--secondary-text-color); }
+        #wifiStatusText { font-size: 1.0em; vertical-align: middle; color: var(--icom-light-grey); }
         
         .button-group{margin-bottom:var(--group-spacing);text-align:left;}
         .button-group:last-child{margin-bottom:15px;}
-        .group-title{font-size:0.9em;font-weight:600;color:var(--secondary-text-color);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:15px;padding-left:5px;}
+        .group-title{font-size:0.9em;font-weight:600;color:var(--icom-light-grey);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:15px;padding-left:5px;}
         
-        button { padding:12px 10px; font-size:0.95rem; font-weight:500; text-align:center; cursor:pointer; border:none; border-radius:var(--border-radius); background-color: var(--apple-blue); color:white; transition: background-color 0.15s ease, transform 0.05s ease; -webkit-tap-highlight-color: transparent; box-sizing:border-box; outline: none; }
-        button:focus, button:focus-visible { background-color: #004085; color: #f0f0f0; }
-        button:active { background-color: #003366; transform: scale(0.96); }
+        button { padding:12px 10px; font-size:0.95rem; font-weight:500; text-align:center; cursor:pointer; border: 1px solid var(--icom-black); border-radius:var(--border-radius); background-color: var(--button-bg); color:var(--button-text); transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease; -webkit-tap-highlight-color: transparent; box-sizing:border-box; outline: none; box-shadow: inset 0 2px 5px var(--icom-shadow-light), inset 0 -2px 5px var(--icom-shadow-dark), 0 2px 4px var(--icom-shadow-dark); text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        button:focus, button:focus-visible { background-color: var(--icom-blue-accent); color: var(--icom-black); box-shadow: inset 0 1px 3px var(--icom-shadow-dark), 0 1px 2px var(--icom-shadow-dark); }
+        button:active { background-color: var(--icom-blue-accent); transform: translateY(1px) scale(0.98); box-shadow: inset 0 1px 3px var(--icom-shadow-dark); }
         
         .button-group .button-stack button{display:block;width:100%;margin-bottom:var(--button-v-spacing);}
         .button-group .button-stack button:last-child{margin-bottom:0;}
         .button-group .button-row{display:flex;gap:var(--button-h-spacing);justify-content:space-between;}
         .button-group .button-row button{flex:1;}
-        .status{margin-top:25px; font-size:0.85em; color:var(--secondary-text-color); min-height:3em; line-height:1.4; text-align:left; background-color: var(--light-grey); padding: 8px 12px; border-radius: 5px; white-space: pre-wrap;}
+        .status{margin-top:25px; font-size:0.85em; color:var(--icom-light-grey); min-height:3em; line-height:1.4; text-align:left; background-color: var(--icom-black); padding: 8px 12px; border-radius: 5px; white-space: pre-wrap;}
     </style>
 </head>
 <body>

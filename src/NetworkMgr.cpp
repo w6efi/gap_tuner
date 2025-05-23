@@ -221,21 +221,133 @@ void NetworkMgr::handleConfigRoot(AsyncWebServerRequest *request) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>WiFi Setup</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .container { background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 400px; margin: auto; }
-        h1 { color: #333; text-align: center; }
-        label { display: block; margin-bottom: 5px; color: #555; }
-        input[type="text"], input[type="password"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; }
-        button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-        button:hover { background-color: #0056b3; }
-        .message { text-align: center; margin-top: 20px; padding: 10px; border-radius: 4px; }
-        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .reset-button { background-color: #dc3545; margin-top: 10px; }
-        .reset-button:hover { background-color: #c82333; }
+        :root{
+            --icom-black:#1a1a1a;
+            --icom-dark-grey:#2c2c2c;
+            --icom-light-grey:#e0e0e0;
+            --icom-blue-accent:#00aaff;
+            --icom-shadow-dark:rgba(0,0,0,0.6);
+            --icom-shadow-light:rgba(255,255,255,0.05);
+            --border-radius:5px;
+            --button-bg:var(--icom-button-grey);
+            --button-text:var(--icom-light-grey);
+            --icom-button-grey:#424242; /* Midway dark grey */
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            background-color: var(--icom-black);
+            margin: 0;
+            padding: 20px 15px;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            color: var(--icom-light-grey); /* Default text color */
+        }
+        .container {
+            background: var(--icom-dark-grey);
+            padding: 25px 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 15px var(--icom-shadow-dark), inset 0 0 5px var(--icom-shadow-light);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: var(--icom-light-grey);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.6em;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--icom-light-grey);
+            text-align: left;
+            font-size: 0.95em;
+        }
+        input[type="text"], input[type="password"] {
+            width: calc(100% - 22px); /* Adjust for padding and border */
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--icom-black);
+            border-radius: var(--border-radius);
+            background-color: var(--icom-black);
+            color: var(--icom-light-grey);
+            box-shadow: inset 0 1px 3px var(--icom-shadow-dark);
+            box-sizing: border-box;
+            outline: none;
+        }
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: var(--icom-blue-accent);
+            box-shadow: inset 0 1px 3px var(--icom-shadow-dark), 0 0 0 2px var(--icom-blue-accent);
+        }
+        button {
+            padding: 12px 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid var(--icom-black);
+            border-radius: var(--border-radius);
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            outline: none;
+            box-shadow: inset 0 2px 5px var(--icom-shadow-light), inset 0 -2px 5px var(--icom-shadow-dark), 0 2px 4px var(--icom-shadow-dark);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+            width: 100%; /* Ensure buttons take full width */
+        }
+        button:focus, button:focus-visible {
+            background-color: var(--icom-blue-accent);
+            color: var(--icom-black);
+            box-shadow: inset 0 1px 3px var(--icom-shadow-dark), 0 1px 2px var(--icom-shadow-dark);
+        }
+        button:active {
+            background-color: var(--icom-blue-accent);
+            transform: translateY(1px) scale(0.98);
+            box-shadow: inset 0 1px 3px var(--icom-shadow-dark);
+        }
+        .message {
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .success {
+            background-color: #28a745; /* Icom green */
+            color: var(--icom-black);
+            border: 1px solid #218838;
+        }
+        .error {
+            background-color: #dc3545; /* Icom red */
+            color: var(--icom-black);
+            border: 1px solid #c82333;
+        }
+        .reset-button {
+            background-color: var(--icom-dark-grey); /* Use dark grey for reset button */
+            margin-top: 10px;
+            border: 1px solid var(--icom-black);
+            box-shadow: inset 0 2px 5px var(--icom-shadow-light), inset 0 -2px 5px var(--icom-shadow-dark), 0 2px 4px var(--icom-shadow-dark);
+        }
+        .reset-button:hover {
+            background-color: var(--icom-dark-grey); /* Keep same on hover */
+        }
+        .reset-button:active {
+            background-color: var(--icom-dark-grey);
+            transform: translateY(1px) scale(0.98);
+            box-shadow: inset 0 1px 3px var(--icom-shadow-dark);
+        }
     </style>
 </head>
 <body>
