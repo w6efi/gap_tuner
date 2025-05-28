@@ -26,9 +26,9 @@ private:
     // Given they define the core logic and might be inspected, header is fine.
 
     // Relay configuration for setting antenna length to "Short"
-    static constexpr pinValue_t s_antennaLengthShort[] = {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, LOW}};
+    static constexpr pinValue_t s_antennaLengthShort[] = {{RELAY_K7, LOW}};
     // Relay configuration for setting antenna length to "Long"
-    static constexpr pinValue_t s_antennaLengthLong[]  = {{RELAY_K5, HIGH}, {RELAY_K6, HIGH}, {RELAY_K7, HIGH}};
+    static constexpr pinValue_t s_antennaLengthLong[]  = {{RELAY_K7, HIGH}};
 
     // Relay configuration for setting Tuning Network to "None" (all tuning relays off)
     static constexpr pinValue_t s_tuningNetNone[]      = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};

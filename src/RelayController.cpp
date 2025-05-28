@@ -31,6 +31,13 @@ String RelayController::applyActions(const pinValue_t actions[], size_t count) {
     return details;
 }
 
+void RelayController::pulse(const pin_t relay) {
+    DEBUG_PRINTF("pulsing relay %s\n", this->getRelayName(relay));
+    digitalWrite(relay, HIGH);
+    delay(100);
+    digitalWrite(relay, LOW);
+}
+
 const char* RelayController::getRelayName(pin_t pin_val) {
     switch (pin_val) {
         case RELAY_K1: return "RELAY_K1"; case RELAY_K2: return "RELAY_K2";

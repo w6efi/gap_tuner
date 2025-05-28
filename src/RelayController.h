@@ -30,6 +30,7 @@ public:
     RelayController();
     void initializePins();
     String applyActions(const pinValue_t actions[], size_t count);
+    void pulse(const pin_t relay);
 
 private:
     const char* getRelayName(pin_t pin_val);

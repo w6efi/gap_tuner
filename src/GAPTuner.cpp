@@ -23,9 +23,15 @@ String GAPTuner::processButtonAction(int buttonId_int, String& outMessage)
     switch(buttonId) {
     case ButtonID::ANTENNA_SHORT:
         actionDetails = applyRelayActions(outMessage, "Antenna set to Short:", s_antennaLengthShort);
+        _relayController.pulse(RELAY_K5);
+        _relayController.pulse(RELAY_K6);
+         digitalWrite(RELAY_K7, LOW);
         break;
     case ButtonID::ANTENNA_LONG:
         actionDetails = applyRelayActions(outMessage, "Antenna set to Long:", s_antennaLengthLong);
+        _relayController.pulse(RELAY_K5);
+        _relayController.pulse(RELAY_K6);
+        digitalWrite(RELAY_K7, LOW);
         break;
     case ButtonID::TUNING_NONE:
         actionDetails = applyRelayActions(outMessage, "Tuning Network set to None:", s_tuningNetNone);
