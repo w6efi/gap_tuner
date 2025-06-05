@@ -8,6 +8,9 @@
 #include <nvs.h>       // For NVS API
 #include <ESPAsyncWebServer.h> // For AsyncWebServerRequest
 
+// Define the WiFi reset button pin
+#define WIFI_RESET_BUTTON_PIN GPIO_NUM_1
+
 class NetworkMgr {
 public:
     // Constructor now only takes hostname; SSID/password handled via NVS/AP
@@ -19,12 +22,14 @@ public:
     // New methods for NVS credential management
     bool saveCredentials(const char* ssid, const char* password);
     bool loadCredentials();
-    void clearCredentials(); // Optional: for resetting WiFi config
+    void clearCredentials(); // For resetting WiFi config
+    void checkAndHandleWiFiResetButton(); // New method to handle button press
 
 private:
     String _ssid;      // Stored SSID from NVS or AP config
     String _password;  // Stored Password from NVS or AP config
     const char* _hostname;
+    const int _wifiResetButtonPin; // Pin for the WiFi reset button
 
     // NVS handle
     nvs_handle_t _nvsHandle;

@@ -40,6 +40,9 @@ void setup()
     #endif
     DEBUG_PRINTLN("\nStarting GAP Antenna Tuner Controller (v3)...");
 
+    // Check and handle WiFi reset button press
+    g_networkMgr.checkAndHandleWiFiResetButton();
+
     g_relayController.initializePins();
     g_gaptuner.applyDefaultState();
 
@@ -58,15 +61,15 @@ void setup()
         g_webServerManager.setupRoutes();
         g_webServerManager.begin();
     } else {
-        DEBUG_PRINTLN("Setup: WiFi connection failed. Server not started.");
-        // In a real scenario, the startConfigAP() in NetworkMgr::connect()
-        // would handle the fallback to AP mode for configuration.
+        DEBUG_PRINTLN("Setup: WiFi connection failed. Starting configuration AP.");
+        // The NetworkMgr::connect() method should handle starting the AP if connection fails.
+        // No explicit call to startConfigAP() here as connect() is expected to manage it.
     }
 }
 
 void loop()
 {
-    delay(10);
+    // No delay needed for AsyncWebServer
 }
 
 // Gap Tuner UI HTML and Javascript
@@ -109,7 +112,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     <div class="container" id="controlContainer">
         <h1>GAP Antenna Tuner</h1>
         <div class="wifi-status-line"> <span id="wifiStatusIndicator"></span><span id="wifiStatusText">Checking...</span> </div>
-        <div class="button-group"> <h3 class="group-title">Antenna Length</h3> <div class="button-row"> <button data-id="1">Short</button> <button data-id="2">Long</button> </div> </div>
+        <div class="button-group"> <h3 class="group-title">Antenna Length</h3> <div class="button-row"> <button data-id="1">Shorter</button> <button data-id="2">Longer</button> </div> </div>
         <div class="button-group"> <h3 class="group-title">Tuning Network</h3> <div class="button-row"> <button data-id="3">None</button> <button data-id="4">1</button> <button data-id="5">2</button> </div> </div>
         <div class="button-group"> <h3 class="group-title">Calibration</h3> <div class="button-row"> <button data-id="6">Open</button> <button data-id="7">Short</button> <button data-id="8">Load</button> </div> </div>
         <div class="status" id="statusMessage">Select an option above.</div>
@@ -124,7 +127,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                 const wifiStatusText = document.getElementById('wifiStatusText');
                 if (!wifiIndicator || !wifiStatusText) { console.warn("WiFi status elements not found yet."); return; }
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 4000);
+                const timeoutId = setTimeout(() => controller.abort(), 15000); // Increased timeout to 15 seconds
                 fetch('/wifi-status', { signal: controller.signal })
                     .then(response => {
                         clearTimeout(timeoutId);

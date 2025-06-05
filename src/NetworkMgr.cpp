@@ -12,7 +12,7 @@
 
 // Constructor
 NetworkMgr::NetworkMgr(const char* confHostname) :
-    _hostname(confHostname), _configWebServer(80) { // Initialize _configWebServer with port 80
+    _hostname(confHostname), _configWebServer(80), _wifiResetButtonPin(WIFI_RESET_BUTTON_PIN) { // Initialize _configWebServer and _wifiResetButtonPin
     // Initialize NVS
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
@@ -204,9 +204,6 @@ void NetworkMgr::startConfigAP() {
     _configWebServer.on("/save", HTTP_POST, [this](AsyncWebServerRequest *request){
         this->handleConfigSave(request);
     });
-    _configWebServer.on("/reset", HTTP_GET, [this](AsyncWebServerRequest *request){
-        this->handleConfigReset(request);
-    });
     _configWebServer.onNotFound([this](AsyncWebServerRequest *request){
         this->handleConfigNotFound(request);
     });
@@ -360,7 +357,6 @@ void NetworkMgr::handleConfigRoot(AsyncWebServerRequest *request) {
             <input type="password" id="password" name="password"><br>
             <button type="submit">Save and Connect</button>
         </form>
-        <button class="reset-button" onclick="location.href='/reset'">Clear Saved WiFi & Restart</button>
         <div id="message" class="message"></div>
     </div>
     <script>
@@ -428,4 +424,22 @@ void NetworkMgr::handleConfigReset(AsyncWebServerRequest *request) {
 
 void NetworkMgr::handleConfigNotFound(AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "Configuration page not found.");
+}
+
+// Check and handle WiFi reset button press on power-up
+void NetworkMgr::checkAndHandleWiFiResetButton() {
+    // Configure the WiFi reset button pin
+    pinMode(_wifiResetButtonPin, INPUT_PULLUP);
+
+    // A short delay to allow the pin to settle after power-up
+    delay(500); 
+    if (digitalRead(_wifiResetButtonPin) == LOW) {
+        DEBUG_PRINTLN("NetworkMgr: WiFi Reset Button pressed. Clearing WiFi credentials...");
+        clearCredentials();
+        // A small delay to ensure NVS write completes before proceeding
+        delay(500); 
+    }
+    else {
+        DEBUG_PRINTLN("NetworkMgr: WiFi Reset Button not pressed.");
+    }
 }
