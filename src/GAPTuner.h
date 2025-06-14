@@ -38,11 +38,11 @@ private:
     static constexpr pinValue_t s_tuningNet2[]         = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}}; // Example correction
 
     // Relay configuration for "Open" calibration state
-    static constexpr pinValue_t s_calOpen[]            = {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}};
+    static constexpr pinValue_t s_calOpen[]            = {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
     // Relay configuration for "Short" calibration state
-    static constexpr pinValue_t s_calShort[]           = {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, HIGH}};
+    static constexpr pinValue_t s_calShort[]           = {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}};
     // Relay configuration for "Load" calibration state
-    static constexpr pinValue_t s_calLoad[]            = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, HIGH}};
+    static constexpr pinValue_t s_calLoad[]            = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}};
 
     // Relay configuration to turn all relays OFF (default power-up state)
     static constexpr pinValue_t s_allOff[]             = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};

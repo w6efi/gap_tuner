@@ -127,7 +127,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                 const wifiStatusText = document.getElementById('wifiStatusText');
                 if (!wifiIndicator || !wifiStatusText) { console.warn("WiFi status elements not found yet."); return; }
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 15000); // Increased timeout to 15 seconds
+                const timeoutId = setTimeout(() => controller.abort(), 5000); // Increased timeout to 5 seconds
                 fetch('/wifi-status', { signal: controller.signal })
                     .then(response => {
                         clearTimeout(timeoutId);

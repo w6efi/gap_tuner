@@ -44,7 +44,8 @@ const char* RelayController::getRelayName(pin_t pin_val) {
         case RELAY_K3: return "RELAY_K3"; case RELAY_K4: return "RELAY_K4";
         case RELAY_K5: return "RELAY_K5"; case RELAY_K6: return "RELAY_K6";
         case RELAY_K7: return "RELAY_K7";
-        case RELAY_LK99_SET: return "RELAY_LK99_SET"; case RELAY_LK99_RESET: return "RELAY_LK99_RESET";
+        case RELAY_LK99_SET: return "RELAY_LK99_SET"; 
+        case RELAY_LK99_RESET: return "RELAY_LK99_RESET";
         default: return "UNKNOWN_PIN";
     }
 }
