@@ -31,21 +31,24 @@ private:
     static constexpr pinValue_t s_antennaLengthLong[]  = {{RELAY_K7, HIGH}};
 
     // Relay configuration for setting Tuning Network to "None" (all tuning relays off)
-    static constexpr pinValue_t s_tuningNetNone[]      = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    static constexpr pinValue_t s_tuningNetNone[]      = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
     // Relay configuration for setting Tuning Network to "1"
-    static constexpr pinValue_t s_tuningNet1[]         = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, HIGH}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    static constexpr pinValue_t s_tuningNet1[]         = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
     // Relay configuration for setting Tuning Network to "2"
-    static constexpr pinValue_t s_tuningNet2[]         = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}}; // Example correction
+    static constexpr pinValue_t s_tuningNet2[]         = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}}; // Example correction
 
     // Relay configuration for "Open" calibration state
-    static constexpr pinValue_t s_calOpen[]            = {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}};
+    static constexpr pinValue_t s_calOpen[]            = {{RELAY_K1, HIGH},{RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW }};
     // Relay configuration for "Short" calibration state
     static constexpr pinValue_t s_calShort[]           = {{RELAY_K1, HIGH},{RELAY_K2, HIGH},{RELAY_K3, LOW}, {RELAY_K4, LOW}};
     // Relay configuration for "Load" calibration state
     static constexpr pinValue_t s_calLoad[]            = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, HIGH},{RELAY_K4, LOW}};
 
     // Relay configuration to turn all relays OFF (default power-up state)
-    static constexpr pinValue_t s_allOff[]             = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW}, {RELAY_K7, LOW}};
+    static constexpr pinValue_t s_allOff[]  = {{RELAY_K1, LOW}, {RELAY_K2, LOW}, {RELAY_K3, LOW}, {RELAY_K4, LOW}, {RELAY_K5, LOW}, {RELAY_K6, LOW},
+        {RELAY_K7, LOW}, {RELAY_LK99_SET, LOW}, {RELAY_LK99_RESET, LOW}};
+
+
 
     template<size_t N>
     String applyRelayActions(String& outMsg, const char* successMsgPrefix, const pinValue_t (&actions)[N]);

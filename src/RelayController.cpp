@@ -12,6 +12,10 @@ void RelayController::initializePins() {
     pinMode(RELAY_K4, OUTPUT); pinMode(RELAY_K5, OUTPUT); pinMode(RELAY_K6, OUTPUT);
     pinMode(RELAY_K7, OUTPUT); 
     pinMode(RELAY_LK99_SET, OUTPUT); pinMode(RELAY_LK99_RESET, OUTPUT);
+    // boost current output to 3.3v load selection latching relay
+    gpio_set_drive_capability((gpio_num_t)RELAY_LK99_SET, GPIO_DRIVE_CAP_3);
+    gpio_set_drive_capability((gpio_num_t)RELAY_LK99_RESET, GPIO_DRIVE_CAP_3);
+
 }
 
 String RelayController::applyActions(const pinValue_t actions[], size_t count) {

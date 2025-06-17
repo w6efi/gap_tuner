@@ -39,9 +39,11 @@ String GAPTuner::processButtonAction(int buttonId_int, String& outMessage)
         break;
     case ButtonID::TUNING_1:
         actionDetails = applyRelayActions(outMessage, "Tuning Network set to 1:", s_tuningNet1);
+        _relayController.pulse(RELAY_LK99_SET);
         break;
     case ButtonID::TUNING_2:
         actionDetails = applyRelayActions(outMessage, "Tuning Network set to 2:", s_tuningNet2);
+        _relayController.pulse(RELAY_LK99_RESET);
         break;
     case ButtonID::CAL_OPEN:
         actionDetails = applyRelayActions(outMessage, "Calibration set to Open:", s_calOpen);

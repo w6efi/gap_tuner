@@ -11,8 +11,8 @@ typedef enum pins
 	RELAY_K5 = GPIO_NUM_3,
 	RELAY_K6 = GPIO_NUM_8,
 	RELAY_K7 = GPIO_NUM_18,
-	RELAY_LK99_SET = GPIO_NUM_10,  //latching
-	RELAY_LK99_RESET = GPIO_NUM_9  //latching
+	RELAY_LK99_SET = GPIO_NUM_10,  //latching relay load select
+	RELAY_LK99_RESET = GPIO_NUM_9  //latching realy for load select
 } pin_t;
 
 typedef struct
