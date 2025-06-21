@@ -24,14 +24,14 @@ String GAPTuner::processButtonAction(int buttonId_int, String& outMessage)
         // Gap relay functionality: K7 sets polarity (latching direction of K8, K9), then pulse k5,k6, which sets latching replays  K8 and K9'
         case ButtonID::ANTENNA_SHORT:
         actionDetails = applyRelayActions(outMessage, "Antenna set to Short:", s_antennaLengthShort);
-        _relayController.pulse(RELAY_K5);
-        _relayController.pulse(RELAY_K6);
+        actionDetails += _relayController.pulse(RELAY_K5);
+        actionDetails += _relayController.pulse(RELAY_K6);
          digitalWrite(RELAY_K7, LOW);
         break;
     case ButtonID::ANTENNA_LONG:
         actionDetails = applyRelayActions(outMessage, "Antenna set to Long:", s_antennaLengthLong);
-        _relayController.pulse(RELAY_K5);
-        _relayController.pulse(RELAY_K6);
+        actionDetails += _relayController.pulse(RELAY_K5);
+        actionDetails += _relayController.pulse(RELAY_K6);
         digitalWrite(RELAY_K7, LOW);
         break;
     case ButtonID::TUNING_NONE:
@@ -39,11 +39,11 @@ String GAPTuner::processButtonAction(int buttonId_int, String& outMessage)
         break;
     case ButtonID::TUNING_1:
         actionDetails = applyRelayActions(outMessage, "Tuning Network set to 1:", s_tuningNet1);
-        _relayController.pulse(RELAY_LK99_SET);
+        actionDetails += _relayController.pulse(RELAY_LK99_SET);
         break;
     case ButtonID::TUNING_2:
         actionDetails = applyRelayActions(outMessage, "Tuning Network set to 2:", s_tuningNet2);
-        _relayController.pulse(RELAY_LK99_RESET);
+        actionDetails += _relayController.pulse(RELAY_LK99_RESET);
         break;
     case ButtonID::CAL_OPEN:
         actionDetails = applyRelayActions(outMessage, "Calibration set to Open:", s_calOpen);

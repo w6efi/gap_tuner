@@ -100,6 +100,7 @@ const char index_html[] PROGMEM = R"rawliteral(
         button { padding:12px 10px; font-size:0.95rem; font-weight:500; text-align:center; cursor:pointer; border: 1px solid var(--icom-black); border-radius:var(--border-radius); background-color: var(--button-bg); color:var(--button-text); transition: background-color 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease; -webkit-tap-highlight-color: transparent; box-sizing:border-box; outline: none; box-shadow: inset 0 2px 5px var(--icom-shadow-light), inset 0 -2px 5px var(--icom-shadow-dark), 0 2px 4px var(--icom-shadow-dark); text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         button:focus, button:focus-visible { background-color: var(--icom-blue-accent); color: var(--icom-black); box-shadow: inset 0 1px 3px var(--icom-shadow-dark), 0 1px 2px var(--icom-shadow-dark); }
         button:active { background-color: var(--icom-blue-accent); transform: translateY(1px) scale(0.98); box-shadow: inset 0 1px 3px var(--icom-shadow-dark); }
+        .highlighted { background-color: var(--icom-blue-accent); color: var(--icom-black); box-shadow: inset 0 1px 3px var(--icom-shadow-dark), 0 1px 2px var(--icom-shadow-dark); }
         
         .button-group .button-stack button{display:block;width:100%;margin-bottom:var(--button-v-spacing);}
         .button-group .button-stack button:last-child{margin-bottom:0;}
@@ -121,6 +122,19 @@ const char index_html[] PROGMEM = R"rawliteral(
         document.addEventListener('DOMContentLoaded', () => {
             const controlContainer = document.getElementById('controlContainer');
             const statusMessage = document.getElementById('statusMessage');
+            let lastHighlightedAntennaButton = null; // To keep track of the last highlighted button in the antenna group
+            let lastHighlightedOtherButton = null;    // To keep track of the last highlighted button in the other group
+
+            // Helper function to determine button group
+            function getButtonGroup(buttonId) {
+                const id = parseInt(buttonId, 10);
+                if (id === 1 || id === 2) {
+                    return 'antenna'; // ANTENNA_SHORT, ANTENNA_LONG
+                } else if (id >= 3 && id <= 8) {
+                    return 'other'; // TUNING_NONE, TUNING_1, TUNING_2, CAL_OPEN, CAL_SHORT, CAL_LOAD
+                }
+                return 'unknown'; // Should not happen with valid button IDs
+            }
 
             function checkWifiStatus() {
                 const wifiIndicator = document.getElementById('wifiStatusIndicator');
@@ -158,6 +172,23 @@ const char index_html[] PROGMEM = R"rawliteral(
                         event.preventDefault();
                         const button_id_str = event.target.dataset.id;
                         const button_text_content = event.target.textContent;
+                        const currentButtonGroup = getButtonGroup(button_id_str);
+
+                        if (currentButtonGroup === 'antenna') {
+                            if (lastHighlightedAntennaButton && lastHighlightedAntennaButton !== event.target) {
+                                lastHighlightedAntennaButton.classList.remove('highlighted');
+                            }
+                            event.target.classList.add('highlighted');
+                            lastHighlightedAntennaButton = event.target;
+                        } else if (currentButtonGroup === 'other') {
+                            if (lastHighlightedOtherButton && lastHighlightedOtherButton !== event.target) {
+                                lastHighlightedOtherButton.classList.remove('highlighted');
+                            }
+                            event.target.classList.add('highlighted');
+                            lastHighlightedOtherButton = event.target;
+                        }
+                        // If 'unknown' group, do nothing with highlighting
+
                         if (statusMessage) { statusMessage.textContent = `Sending: ${button_text_content}...`; }
                         else { console.error("statusMessage element not found!"); }
                         fetch(`/button?id=${button_id_str}`)

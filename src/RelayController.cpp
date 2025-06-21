@@ -35,11 +35,15 @@ String RelayController::applyActions(const pinValue_t actions[], size_t count) {
     return details;
 }
 
-void RelayController::pulse(const pin_t relay) {
-    DEBUG_PRINTF("pulsing relay %s\n", this->getRelayName(relay));
+String RelayController::pulse(const pin_t relay) {
+    char buffer[100]; const size_t bufferSize = sizeof(buffer);
+    const char* relayName = getRelayName(relay);
+    DEBUG_PRINTF("pulsing relay %s\n", relayName);
     digitalWrite(relay, HIGH);
     delay(100);
     digitalWrite(relay, LOW);
+    snprintf(buffer, bufferSize, "\n - %s Pulsed", relayName);
+    return String(buffer);
 }
 
 const char* RelayController::getRelayName(pin_t pin_val) {
