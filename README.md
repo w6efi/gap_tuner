@@ -8,7 +8,8 @@ We are currently using the ESP32-S3-DevKitC-1U-N8 from Espressif (with the ipex 
 
 Current Web UI image:
 
-<img src="https://github.com/user-attachments/assets/45125385-b0fe-4bb3-9fa4-e46c5790eb9a", width=350>
+![Image](https://github.com/user-attachments/assets/aa330623-e645-4571-9226-5e76ad633da7)
+
 
 
 
