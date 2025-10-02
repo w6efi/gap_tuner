@@ -1,4 +1,5 @@
 # Gap Dipole antenna tuner firmware
+### (work in progress)
 
 The Gap Dipole is an antenna and remote tuner that allows both changing the length of the dipole in real time, via switched relays, and remote tuning.   The tuner hardware sits at the antenna feed point and is controlled over WiFi.   The ESP32 in the tuner provides a web server which supplies the control page for the tuner.  The control web page (accessed via phone,table, computer, etc.), provides a UI to operate the tuner functions.
 
@@ -34,7 +35,6 @@ When powered on for the first time, GAPTuner creates its own Wi-Fi network so yo
 - Connect to it.  
 - **Password:** _(if applicable – depends on your device's configuration)_
 
----
 
 ## ✅ Step 3: Open the Setup Page
 
@@ -42,7 +42,6 @@ When powered on for the first time, GAPTuner creates its own Wi-Fi network so yo
 - If not, open a browser and go to: http://192.168.4.1
 
 
----
 
 ## ✅ Step 4: Enter Your Wi-Fi Information
 
@@ -50,7 +49,6 @@ When powered on for the first time, GAPTuner creates its own Wi-Fi network so yo
 - Enter your **Wi-Fi password**.
 - Click **Connect**.
 
----
 
 ## ✅ Step 5: Wait for Reboot
 
@@ -88,7 +86,7 @@ If GAPTuner fails to connect to your Wi-Fi (wrong password, signal issue, etc.):
 - Just repeat the setup process from **Step 2**.
 
 
-Current Web UI image:
+# Current Web UI image:
 
 ![Image](https://github.com/user-attachments/assets/aa330623-e645-4571-9226-5e76ad633da7)
 
