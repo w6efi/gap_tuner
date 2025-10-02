@@ -20,10 +20,8 @@ public:
     String processButtonAction(int buttonId_int, String& outMessage);
 
 private:
-    // Static constexpr arrays need to be defined in the header if they are to be used
-    // by other compilation units or if their size is needed at compile time elsewhere.
-    // Alternatively, they can be defined in the .cpp file if only used internally there.
-    // Given they define the core logic and might be inspected, header is fine.
+    // Static relay configurations for each button action
+    // Each array contains pin-value pairs to set the relays accordingly
 
     // Relay configuration for setting antenna length to "Short"
     static constexpr pinValue_t s_antennaLengthShort[] = {{RELAY_K7, LOW}};

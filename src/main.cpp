@@ -35,7 +35,7 @@ WebServerManager g_webServerManager(g_asyncServer, g_gaptuner, g_networkMgr);
 // ==========================================================================
 void setup()
 {
-    #if DEBUG > 0 // This check is also in DebugUtils.h, but Serial.begin is specific to setup
+    #if DEBUG > 0
       Serial.begin(115200);
     #endif
     DEBUG_PRINTLN("\nStarting GAP Antenna Tuner Controller (v3)...");
@@ -63,13 +63,14 @@ void setup()
     } else {
         DEBUG_PRINTLN("Setup: WiFi connection failed. Starting configuration AP.");
         // The NetworkMgr::connect() method should handle starting the AP if connection fails.
-        // No explicit call to startConfigAP() here as connect() is expected to manage it.
+
     }
 }
 
 void loop()
 {
-    // No delay needed for AsyncWebServer
+    // Do nothing here. Application is driven through http requests to AsyncWebserver
+    // See WebServerManager::handle* which processes incoming http requests and acts on them.
 }
 
 // Gap Tuner UI HTML and Javascript

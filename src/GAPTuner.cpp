@@ -3,8 +3,7 @@
 
 // Constructor
 GAPTuner::GAPTuner(RelayController& rc) : _relayController(rc)
-{
-    // Constructor body, if needed
+{  
 }
 
 void GAPTuner::applyDefaultState()
@@ -22,7 +21,7 @@ String GAPTuner::processButtonAction(int buttonId_int, String& outMessage)
 
     switch(buttonId) {
         // Gap relay functionality: K7 sets polarity (latching direction of K8, K9), then pulse k5,k6, which sets latching replays  K8 and K9'
-        case ButtonID::ANTENNA_SHORT:
+    case ButtonID::ANTENNA_SHORT:
         actionDetails = applyRelayActions(outMessage, "Antenna set to Short:", s_antennaLengthShort);
         actionDetails += _relayController.pulse(RELAY_K5);
         actionDetails += _relayController.pulse(RELAY_K6);

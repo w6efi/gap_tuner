@@ -212,6 +212,10 @@ void NetworkMgr::startConfigAP() {
     DEBUG_PRINTLN("NetworkMgr: Configuration Web Server started.");
 }
 
+//
+//Access point UI HTML and Javascript
+//
+
 void NetworkMgr::handleConfigRoot(AsyncWebServerRequest *request) {
     const char* html = R"rawliteral(
 <!DOCTYPE html>
